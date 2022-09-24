@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    public Transform rayStart; 
+
     public float speed;
     
     private Rigidbody rb;
@@ -25,20 +27,23 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        float moveHorizontal = Input.GetAxisRaw("Horizontal") * speed;
+        float moveVertical = Input.GetAxisRaw("Vertical") * speed;
+        moveHorizontal *= Time.deltaTime;
+        moveVertical *= Time.deltaTime;
 
-        Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
+        transform.Translate(moveHorizontal, 0, moveVertical, Space.World);
 
-        rb.AddForce(movement * speed);
-
-        if((Input.GetButtonDown("Jump")) && (isGrounded))
-        {
+        if ((Input.GetKey(KeyCode.Space)) && (isGrounded))
+        {            
             rb.AddForce(Vector3.up * jumpStrength, ForceMode.Impulse);
             isGrounded = false;
         }
+    }
 
-        if(transform.position.y<=-1.5)
+    private void Update()
+    {
+        if ((Physics.Raycast(rayStart.position, -transform.up, Mathf.Infinity) == false) && (transform.position.y <= -1.5))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }

@@ -7,7 +7,7 @@ public class NextLevel : MonoBehaviour
     {
         if(collision.collider.tag=="Player")
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            Application.Quit();
         }
     }
 }

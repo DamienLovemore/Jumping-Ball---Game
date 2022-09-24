@@ -2,11 +2,8 @@
 
 public class BackgroundFunctions : MonoBehaviour
 {
-    private bool isFullscreen;
-
     void Start()
     {
-        isFullscreen = false;
         GameObject exitButtonText = GameObject.Find("ExitText");
         exitButtonText.GetComponent<TMPro.TextMeshProUGUI>().text = "Exit";
     }
@@ -15,16 +12,15 @@ public class BackgroundFunctions : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.F11))
         {
-            if(isFullscreen==false)
-            {
-                Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
-                isFullscreen = true;
-            }
+            FullScreenMode actualScreenMode = Screen.fullScreenMode;
 
+            if ((actualScreenMode == FullScreenMode.Windowed) || (actualScreenMode == FullScreenMode.MaximizedWindow))
+            {
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+            }
             else
             {
-                Screen.SetResolution(840, 607, false);
-                isFullscreen = false;
+                Screen.fullScreenMode = FullScreenMode.Windowed;
             }
         }
     }

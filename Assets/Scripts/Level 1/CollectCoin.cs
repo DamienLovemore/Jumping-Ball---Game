@@ -10,13 +10,8 @@ public class CollectCoin : MonoBehaviour
     {
         if(other.tag=="Player")
         {
-            Vector3 objectScale;
-
-            spawnPoint.position =thisCoin.GetComponent<Transform>().position;
-
-            objectScale = spawnPoint.lossyScale;
-            spawnPoint.SetParent(platformPlaced);
-            spawnPoint.localScale = objectScale;
+            spawnPoint.position = thisCoin.GetComponent<Transform>().position;
+            spawnPoint.transform.parent = platformPlaced.transform;
 
             Destroy(thisCoin);
         }

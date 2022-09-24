@@ -2,27 +2,19 @@
 
 public class BackgroundGameFunctions : MonoBehaviour
 {
-    private bool switchFullscreen;
-
-    private void Start()
-    {
-        switchFullscreen = true;
-    }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F11))
         {
-            if(switchFullscreen)
-            {
-                Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
-                switchFullscreen = false;
-            }
+            FullScreenMode actualScreenMode = Screen.fullScreenMode;
 
+            if ((actualScreenMode == FullScreenMode.Windowed) || (actualScreenMode == FullScreenMode.MaximizedWindow))
+            {
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+            }
             else
             {
-                Screen.SetResolution(840, 647, false);
-                switchFullscreen = true;
+                Screen.fullScreenMode = FullScreenMode.Windowed;
             }
         }
     }

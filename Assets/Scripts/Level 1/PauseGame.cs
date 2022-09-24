@@ -11,8 +11,6 @@ public class PauseGame : MonoBehaviour
 
     public GameObject controlImage;
 
-    private bool isFullscreen;
-
     // Update is called once per frame
     void Update()
     {
@@ -31,16 +29,15 @@ public class PauseGame : MonoBehaviour
 
         else if (Input.GetKeyDown(KeyCode.F11))
         {
-            if(isFullscreen==false)
-            {
-                Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
-                isFullscreen = true;
-            }
+            FullScreenMode actualScreenMode = Screen.fullScreenMode;
 
+            if((actualScreenMode == FullScreenMode.Windowed) || (actualScreenMode == FullScreenMode.MaximizedWindow))
+            {
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+            }
             else
             {
-                Screen.SetResolution(840, 607, false);
-                isFullscreen = false;
+                Screen.fullScreenMode = FullScreenMode.Windowed;
             }
         }
     }

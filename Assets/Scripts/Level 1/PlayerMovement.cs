@@ -1,26 +1,54 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject player;
+    public GameObject spawnPoint;
+
+    public Transform rayStart;
+
+    public float speed;
+
     private Rigidbody rb;
-    public float movementSpeed;
-            
+
+    public float jumpStrength;
+
+
+    private bool isGrounded;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        isGrounded = true;
     }
         
     void FixedUpdate()
     {
-        float movementHorizontal;
-        float movementVertical;
-        Vector3 newDirection;
+        float moveHorizontal = Input.GetAxisRaw("Horizontal") * speed;
+        float moveVertical = Input.GetAxisRaw("Vertical") * speed;
+        moveHorizontal *= Time.deltaTime;
+        moveVertical *= Time.deltaTime;
 
-        movementHorizontal = Input.GetAxis("Horizontal");
-        movementVertical = Input.GetAxis("Vertical");
+        transform.Translate(moveHorizontal, 0, moveVertical, Space.World);
 
-        newDirection = new Vector3(movementHorizontal, 0, movementVertical);
+        if ((Input.GetKey(KeyCode.Space)) && (isGrounded))
+        {
+            rb.AddForce(Vector3.up * jumpStrength, ForceMode.Impulse);
+            isGrounded = false;
+        }
+    }
 
-        rb.AddForce(newDirection * movementSpeed);
+    private void Update()
+    {
+        if ((Physics.Raycast(rayStart.position, -transform.up, Mathf.Infinity) == false) && (transform.position.y <= -1.5))
+        {
+            player.GetComponent<Transform>().position = spawnPoint.GetComponent<Transform>().position;
+        }
+    }
+
+    private void OnCollisionEnter()
+    {
+        isGrounded = true;
     }
 }

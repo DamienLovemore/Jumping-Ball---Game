@@ -2,15 +2,15 @@
 
 public class MovePlayerAlong : MonoBehaviour
 {
-    private Vector3 originalScale;
+    private GameObject placeHolder;
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.gameObject.tag=="Player")
         {
-            originalScale = GameObject.Find("Player").transform.lossyScale;
-            GameObject.Find("Player").transform.SetParent(transform);
-            GameObject.Find("Player").transform.localScale = originalScale;
+            placeHolder = new GameObject("Placeholder - Avoid Resizing");
+            placeHolder.transform.parent = transform;
+            GameObject.Find("Player").transform.parent = placeHolder.transform;            
         }
     }
 
@@ -19,7 +19,7 @@ public class MovePlayerAlong : MonoBehaviour
         if(collision.collider.gameObject.tag=="Player")
         {
             GameObject.Find("Player").transform.SetParent(null);
-            GameObject.Find("Player").transform.localScale = originalScale;
+            Destroy(placeHolder);
         }
     }
 }
